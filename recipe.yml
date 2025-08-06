@@ -27,7 +27,7 @@ stages:
     type: apt
     source:
       packages:
-      - vim
+      - nano
 
   - name: example-commands # Sample module demonstrating the Shell module with custom commands
     type: shell
