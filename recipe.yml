@@ -37,10 +37,7 @@ stages:
     type: apt
     source:
       packages:
-      - rocm-dkms 
-      - rocm-hip-runtime 
-      - rocm-smi-lib 
-      - rocminfo
+      - rocm
 
   - name: amd-rocm-post
     type: shell
