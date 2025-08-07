@@ -42,7 +42,7 @@ stages:
   - name: amd-rocm-post
     type: shell
     commands:
-    - tee --append /etc/ld.so.conf.d/rocm.conf <<< -e "/opt/rocm/lib\n/opt/rocm/lib64"
+    - printf '/opt/rocm/lib\n/opt/rocm/lib64\n' >> /etc/ld.so.conf.d/rocm.conf
     - ldconfig    
       
   - name: example-packages # Sample module using the built-in Apt module to install packages
