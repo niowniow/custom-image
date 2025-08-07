@@ -3,6 +3,7 @@ type: shell
 source:
     type: tar
     url: https://github.com/astral-sh/uv/releases/download/0.8.5/uv-x86_64-unknown-linux-musl.tar.gz
+    checksum: 64aec5c2fa8255d19ff20480afb6445e29be94628c58a429c131f5c60bd990b5
 commands:
   - mkdir -p /usr/bin
   - cp /sources/uv/uv-x86_64-unknown-linux-musl/uv /usr/bin/uv
