@@ -4,8 +4,5 @@ sources:
     type: tar
     url: https://github.com/astral-sh/uv/releases/download/0.8.5/uv-x86_64-unknown-linux-musl.tar.gz
 commands:
-  - mkdir -p /usr/bin
-  - cp /sources/uv/uv-x86_64-unknown-linux-musl/uv-x86_64-unknown-linux-musl/uv /usr/bin/
-  - cp /sources/uv/uv-x86_64-unknown-linux-musl/uv-x86_64-unknown-linux-musl/uvx /usr/bin/
-  - chmod +x /usr/bin/uv
-  - chmod +x /usr/bin/uvx
+  - echo "Listing contents of /app:"
+  - ls -l /sources
