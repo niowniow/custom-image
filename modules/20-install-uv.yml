@@ -1,6 +1,6 @@
 name: uv
 type: shell
-sources:
+source:
     type: tar
     url: https://github.com/astral-sh/uv/releases/download/0.8.5/uv-x86_64-unknown-linux-musl.tar.gz
 commands:
