@@ -31,19 +31,41 @@ stages:
     commands:
     - lpkg --unlock
     - apt-get update
-
     
-  - name: install-amd-rocm
+  - name: rocm-pre
+    type: shell
+    commands:
+    - echo -e "KERNEL==\"kfd\", MODE=\"0666\"\nSUBSYSTEM==\"drm\", KERNEL==\"renderD*\", MODE=\"0666\"" > /etc/udev/rules.d/70-amdgpu.rules
+
+  - name: install-rocm-core
     type: apt
     source:
       packages:
-      - rocm
+      - rocm-core
+      - rocm-hip-runtime
+      - rocm-llvm
 
-  - name: amd-rocm-post
+  - name: install-rocm-monitoring
+    type: apt
+    source:
+      packages:
+      - rocm-smi-lib
+
+  - name: install-rocm-libs
+    type: apt
+    source:
+      packages:
+      - rocblas
+      - hipblas
+      - miopen-hip
+      - rccl
+
+  - name: rocm-post
     type: shell
     commands:
     - printf '/opt/rocm/lib\n/opt/rocm/lib64\n' >> /etc/ld.so.conf.d/rocm.conf
-    - ldconfig    
+    - ldconfig
+
       
   - name: example-packages # Sample module using the built-in Apt module to install packages
     type: apt
