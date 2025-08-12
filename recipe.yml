@@ -35,6 +35,11 @@ stages:
     - lpkg --unlock
     - apt-get update
 
+  - name: kernel-modules # Sample module demonstrating importing local and remote modules
+    type: includes
+    includes:
+       - modules/01-kernel.yml
+
   - name: amd-drivers
     type: apt
     source:
