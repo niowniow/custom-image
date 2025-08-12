@@ -27,17 +27,20 @@ stages:
     - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.4.3/ubuntu jammy main" | tee /etc/apt/sources.list.d/amdgpu.list
     - 'printf "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600'
     
-  - name: amd-drivers
-    type: apt
-    source:
-       packages:
-       - amdgpu-dkms
+ 
        
   - name: init-setup
     type: shell
     commands:
     - lpkg --unlock
     - apt-get update
+
+ - name: amd-drivers
+    type: apt
+    source:
+       packages:
+       - amdgpu-dkms
+
 
   - name: rocm-packages
     type: apt
