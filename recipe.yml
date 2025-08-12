@@ -26,8 +26,6 @@ stages:
     - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.4.3 jammy main" | tee /etc/apt/sources.list.d/rocm.list
     - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.4.3/ubuntu jammy main" | tee /etc/apt/sources.list.d/amdgpu.list
     - 'printf "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600'
-    - udevadm control --reload-rules
-    - udevadm trigger
     
   - name: amd-drivers
     type: apt
