@@ -23,15 +23,31 @@ stages:
     commands:
     - mkdir --parents --mode=0755 /etc/apt/keyrings
     - wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | gpg --dearmor | tee /etc/apt/keyrings/rocm.gpg > /dev/null
-    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.4.2 jammy main" | tee /etc/apt/sources.list.d/rocm.list
+    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.4.3 jammy main" | tee /etc/apt/sources.list.d/rocm.list
+    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.4.3/ubuntu jammy main" | sudo tee /etc/apt/sources.list.d/amdgpu.list
     - 'printf "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600'
-
+    - udevadm control --reload-rules
+    - udevadm trigger
+    
+  - name: amd-drivers
+    type: apt
+    source:
+       packages:
+       - amdgpu-dkms
+       
   - name: init-setup
     type: shell
     commands:
     - lpkg --unlock
     - apt-get update
-    
+
+  - name: rocm-packages
+    type: apt
+    source:
+       packages:
+       - python3-setuptools 
+       - python3-wheel
+       
   - name: rocm-pre
     type: shell
     commands:
