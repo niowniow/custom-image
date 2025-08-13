@@ -2,7 +2,7 @@ name: FW16 Vanilla Desktop # Replace this name with your image name
 id: fw16 # Replace this ID with your image ID
 stages:
 - id: build
-  base: debian:bookworm-slim # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
+  base: ghcr.io/vanilla-os/desktop:main # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
   singlelayer: false
   labels:
     maintainer: self-maintained # Optionally, Replace this with your name
@@ -21,14 +21,15 @@ stages:
     commands:
     - apt-get update
 
-  - name: base-packages
-    type: apt
-    source:
-       packages:
-       - libc6
-       - wget
-       - gpg
-       - ca-certificates
+  - name: downgrade-kernel
+    type: shell
+    commands:
+    - echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' | tee /etc/apt/sources.list.d/bookworm.list
+    - printf 'Package: *\nPin: release n=bookworm\nPin-Priority: 100\n' | tee /etc/apt/preferences.d/98-bookworm
+    - apt update
+    - apt install -y -t bookworm linux-image-amd64 linux-header-amd64
+    - apt install -y -t bookworm libc6
+    
 
   # Put your custom actions below this comment
   - name: amd-rocm-init
