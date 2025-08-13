@@ -34,7 +34,8 @@ stages:
   - name: clean-old-kernel
     type: shell
     commands:
-    - apt-get autoremove -y --purge
+    - apt-get remove -y --purge linux-image-6.12.27-amd64 linux-headers-6.12.27-amd64
+
     
   - name: kernel-version-file
     type: shell
