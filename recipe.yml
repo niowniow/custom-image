@@ -16,7 +16,7 @@ stages:
 
   modules:
 
- - name: init-setup
+  - name: init-setup
     type: shell
     commands:
     - apt-get update
