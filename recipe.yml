@@ -31,7 +31,7 @@ stages:
     - apt-get install -y --allow-downgrades linux-image-amd64=$(apt-cache madison linux-image-amd64 | grep 'bookworm' | head -n 1 | awk '{print $3}') linux-headers-amd64=$(apt-cache madison linux-headers-amd64 | grep 'bookworm' | head -n 1 | awk '{print $3}')
     # - apt-get install -y -t bookworm libc6
     
- - name: clean-old-kernel
+  - name: clean-old-kernel
     type: shell
     commands:
     - apt-get autoremove -y --purge
