@@ -16,6 +16,19 @@ stages:
 
   modules:
 
+ - name: init-setup
+    type: shell
+    commands:
+    - apt-get update
+
+  - name: base-packages
+    type: apt
+    source:
+       packages:
+       - libc6
+       - wget
+       - gpg
+       - ca-certificates
 
   # Put your custom actions below this comment
   - name: amd-rocm-init
@@ -29,7 +42,7 @@ stages:
     
  
        
-  - name: init-setup
+  - name: init-rocm-setup
     type: shell
     commands:
     - apt-get update
@@ -38,7 +51,6 @@ stages:
     type: apt
     source:
        packages:
-       - libc6
        - amdgpu-dkms
 
 
