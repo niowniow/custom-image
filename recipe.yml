@@ -32,13 +32,13 @@ stages:
   - name: init-setup
     type: shell
     commands:
-    - lpkg --unlock
     - apt-get update
 
   - name: amd-drivers
     type: apt
     source:
        packages:
+       - libc6
        - amdgpu-dkms
 
 
