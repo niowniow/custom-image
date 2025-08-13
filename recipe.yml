@@ -25,7 +25,7 @@ stages:
     type: shell
     commands:
     - echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' | tee /etc/apt/sources.list.d/bookworm.list
-    - printf 'Package: *\nPin: release n=bookworm\nPin-Priority: 100\n' | tee /etc/apt/preferences.d/98-bookworm
+    - 'printf "Package: *\nPin: release n=bookworm\nPin-Priority: 100\n" | tee /etc/apt/preferences.d/98-bookworm'
     - apt update
     - apt install -y -t bookworm linux-image-amd64 linux-header-amd64
     - apt install -y -t bookworm libc6
