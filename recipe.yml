@@ -28,10 +28,15 @@ stages:
     - echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' | tee /etc/apt/sources.list.d/bookworm.list
     - 'printf "Package: *\nPin: release n=bookworm\nPin-Priority: 100\n" | tee /etc/apt/preferences.d/98-bookworm'
     - apt-get update
-    - apt-get install -y -t bookworm linux-image-amd64 linux-header-amd64
+    - apt-get install -y -t bookworm linux-image-amd64 linux-headers-amd64
     - apt-get install -y -t bookworm libc6
-    
 
+  - name: kernel-version-file
+    type: shell
+    commands:
+      - mkdir -p /usr/share/vanilla
+      - echo "$(ls -1 /usr/lib/modules | head -n 1)" > /usr/share/vanilla/kernel-version
+      
   # Put your custom actions below this comment
   - name: amd-rocm-init
     type: shell
