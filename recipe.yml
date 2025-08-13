@@ -93,14 +93,14 @@ stages:
       packages:
       - rocm-smi-lib
 
-  - name: install-rocm-libs
-    type: apt
-    source:
-      packages:
-      - rocblas
-      - hipblas
-      - miopen-hip
-      - rccl
+  #- name: install-rocm-libs
+  #  type: apt
+  #  source:
+  #    packages:
+  #    - rocblas
+  #    - hipblas
+  #    - miopen-hip
+  #    - rccl
 
   - name: rocm-post
     type: shell
