@@ -2,7 +2,7 @@ name: FW16 Vanilla Desktop # Replace this name with your image name
 id: fw16 # Replace this ID with your image ID
 stages:
 - id: build
-  base: ghcr.io/vanilla-os/desktop:main # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
+  base: debian:bookworm-slim # Optionally, Replace this image URL with a different one i.e. nvidia:main, etc
   singlelayer: false
   labels:
     maintainer: self-maintained # Optionally, Replace this with your name
@@ -34,11 +34,6 @@ stages:
     commands:
     - lpkg --unlock
     - apt-get update
-
-  - name: kernel-modules # Sample module demonstrating importing local and remote modules
-    type: includes
-    includes:
-       - modules/01-kernel.yml
 
   - name: amd-drivers
     type: apt
