@@ -42,7 +42,15 @@ stages:
     commands:
       - mkdir -p /usr/share/vanilla
       - echo "$(ls -1 /usr/lib/modules | head -n 1)" > /usr/share/vanilla/kernel-version
-      
+
+  - name: rocm-pre
+    type: shell
+    commands:
+    - echo -e "KERNEL==\"kfd\", MODE=\"0666\"\nSUBSYSTEM==\"drm\", KERNEL==\"renderD*\", MODE=\"0666\"" > /etc/udev/rules.d/70-amdgpu.rules
+    - echo 'ADD_EXTRA_GROUPS=1' | tee -a /etc/adduser.conf
+    - echo 'EXTRA_GROUPS=video' | tee -a /etc/adduser.conf
+    - echo 'EXTRA_GROUPS=render' | tee -a /etc/adduser.conf
+    
   # Put your custom actions below this comment
   - name: amd-rocm-init
     type: shell
@@ -53,7 +61,6 @@ stages:
     - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.4.3/ubuntu jammy main" | tee /etc/apt/sources.list.d/amdgpu.list
     - 'printf "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600'
     
- 
        
   - name: init-rocm-setup
     type: shell
@@ -66,18 +73,12 @@ stages:
        packages:
        - amdgpu-dkms
 
-
   - name: rocm-packages
     type: apt
     source:
        packages:
        - python3-setuptools 
        - python3-wheel
-       
-  - name: rocm-pre
-    type: shell
-    commands:
-    - echo -e "KERNEL==\"kfd\", MODE=\"0666\"\nSUBSYSTEM==\"drm\", KERNEL==\"renderD*\", MODE=\"0666\"" > /etc/udev/rules.d/70-amdgpu.rules
 
   - name: install-rocm-core
     type: apt
