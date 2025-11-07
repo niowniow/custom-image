@@ -22,46 +22,38 @@ stages:
     - lpkg --unlock
     - apt-get update
 
-  - name: downgrade-kernel
-    type: shell
-    commands:
-    - echo 'deb http://deb.debian.org/debian/ bookworm main contrib non-free non-free-firmware' | tee /etc/apt/sources.list.d/bookworm.list
-    - 'printf "Package: *\nPin: release n=bookworm\nPin-Priority: 100\n" | tee /etc/apt/preferences.d/98-bookworm'
-    - apt-get update
-    - apt-get install -y --allow-downgrades linux-image-amd64=$(apt-cache madison linux-image-amd64 | grep 'bookworm' | head -n 1 | awk '{print $3}') linux-headers-amd64=$(apt-cache madison linux-headers-amd64 | grep 'bookworm' | head -n 1 | awk '{print $3}')
-    # - apt-get install -y -t bookworm libc6
-    
-  - name: clean-old-kernel
-    type: shell
-    commands:
-    - apt-get remove -y --purge linux-image-6.12.27-amd64 linux-headers-6.12.27-amd64
-
-    
   - name: kernel-version-file
     type: shell
     commands:
       - mkdir -p /usr/share/vanilla
       - echo "$(ls -1 /usr/lib/modules | head -n 1)" > /usr/share/vanilla/kernel-version
 
-  - name: rocm-pre
+  # - name: rocm-pre
+  #   type: shell
+  #   commands:
+  #   - echo -e "KERNEL==\"kfd\", MODE=\"0666\"\nSUBSYSTEM==\"drm\", KERNEL==\"renderD*\", MODE=\"0666\"" > /etc/udev/rules.d/70-amdgpu.rules
+  #   - echo 'ADD_EXTRA_GROUPS=1' | tee -a /etc/adduser.conf
+  #   - echo 'EXTRA_GROUPS=video' | tee -a /etc/adduser.conf
+  #   - echo 'EXTRA_GROUPS=render' | tee -a /etc/adduser.conf
+
+  - name: amd-udev
     type: shell
     commands:
-    - echo -e "KERNEL==\"kfd\", MODE=\"0666\"\nSUBSYSTEM==\"drm\", KERNEL==\"renderD*\", MODE=\"0666\"" > /etc/udev/rules.d/70-amdgpu.rules
-    - echo 'ADD_EXTRA_GROUPS=1' | tee -a /etc/adduser.conf
-    - echo 'EXTRA_GROUPS=video' | tee -a /etc/adduser.conf
-    - echo 'EXTRA_GROUPS=render' | tee -a /etc/adduser.conf
-    
+    - apt update
+    - wget https://repo.radeon.com/amdgpu/30.20/ubuntu/pool/main/a/amdgpu-insecure-instinct-udev-rules/amdgpu-insecure-instinct-udev-rules_30.20.0.0-2238411.24.04_all.deb
+    - apt install -y ./amdgpu-insecure-instinct-udev-rules_30.20.0.0-2238411.24.04_all.deb
+
+
   # Put your custom actions below this comment
   - name: amd-rocm-init
     type: shell
     commands:
     - mkdir --parents --mode=0755 /etc/apt/keyrings
     - wget https://repo.radeon.com/rocm/rocm.gpg.key -O - | gpg --dearmor | tee /etc/apt/keyrings/rocm.gpg > /dev/null
-    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/6.4.3 jammy main" | tee /etc/apt/sources.list.d/rocm.list
-    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/amdgpu/6.4.3/ubuntu jammy main" | tee /etc/apt/sources.list.d/amdgpu.list
+    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/rocm/apt/7.1 noble main" | tee /etc/apt/sources.list.d/rocm.list
+    - echo "deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] https://repo.radeon.com/graphics/7.1/ubuntu noble main" | tee /etc/apt/sources.list.d/amdgpu.list
     - 'printf "Package: *\nPin: release o=repo.radeon.com\nPin-Priority: 600" | tee /etc/apt/preferences.d/rocm-pin-600'
-    
-       
+
   - name: init-rocm-setup
     type: shell
     commands:
