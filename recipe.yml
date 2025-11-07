@@ -72,7 +72,7 @@ stages:
     - wget https://repo.radeon.com/amdgpu-install/7.1/ubuntu/noble/amdgpu-install_7.1.70100-1_all.deb
     - apt install -y ./amdgpu-install_7.1.70100-1_all.deb 
     - apt update
-    - apt install -y "linux-headers-$(uname -r)"
+    - apt install -y "linux-headers-$(ls -1 /usr/lib/modules | head -n 1)"
     - apt install -y amdgpu-dkms
 
   - name: rocm-packages
